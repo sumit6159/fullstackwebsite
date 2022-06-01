@@ -40,12 +40,12 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
 });
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    next();
-  }
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) return next();
 
-  this.password = await bcrypt.hash(this.password, 10);
+  var hash = bcrypt.hashSync(this.password, 8);
+  this.password = hash;
+  return next();
 });
 
 // JWT TOKEN
@@ -57,8 +57,8 @@ userSchema.methods.getJWTToken = function () {
 
 // Compare Password
 
-userSchema.methods.comparePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+userSchema.methods.checkPassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
 };
 
 // Generating Password Reset Token
