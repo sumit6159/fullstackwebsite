@@ -1,8 +1,11 @@
 const express = require("express")
-const app = express()
+const app = require("./app");
+
 
 require("dotenv").config()
-
+if (process.env.NODE_ENV !== "PRODUCTION") {
+    require("dotenv").config({ path: "backend/config/config.env" });
+  }
 
 const connect = require('./config/db')
 

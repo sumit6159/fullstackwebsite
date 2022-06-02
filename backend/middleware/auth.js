@@ -1,45 +1,34 @@
+const ErrorHandler = require("../utils/errorHandler");
+const catchAsyncErrors = require("./catchAsyncErrors");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user.model");
 require("dotenv").config()
-const jwt = require("jsonwebtoken")
-const ErrorHandler = require("../utils/errorHandler")
 
+exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
+  const { token } = req.cookies;
 
-const verifyToken = (token)=>{
-    return new Promise((resolve, reject)=>{
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user)=>{
-            if(err) return reject(err)
-            resolve(user)
-        })
-    })
-}
+  if (!token) {
+    return next(new ErrorHandler("Please Login to access this resource", 401));
+  }
 
-exports.authenticate = async (req, res, next) => {
-    const cookieHeader = req.headers?.cookie;
-    if (!cookieHeader) return res.status(200).send({message : "Cookie is missing."});
-    let token = cookieHeader.split("=")[1];
-    let user;
-    try {
-      user = await verifyToken(token);
-    } catch (error) {
-      return res.status(500).send({ message: "Authorization token invalid" });
+  const decodedData = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+  req.user = await User.findById(decodedData.id);
+
+  next();
+});
+
+exports.authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorHandler(
+          `Role: ${req.user.role} is not allowed to access this resouce `,
+          403
+        )
+      );
     }
-    req.user = user.user;
-    return next();
-  };
 
-  exports.authorizeRoles = (...roles) => {
-    return (req, res, next) => {
-      if (!roles.includes(req.user.role)) {
-        return next(
-          new ErrorHandler(
-            `Role: ${req.user.role} is not allowed to access this resouce `,
-            403
-          )
-        );
-      }
-  
-      next();
-    };
+    next();
   };
-  
-
- 
+};
