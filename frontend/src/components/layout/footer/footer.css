@@ -1,0 +1,23 @@
+footer{
+    display: flex;
+    background-color: #131921;
+    color: white;
+    justify-content: space-between;
+    margin-top: 1rem;
+   
+}
+footer div{
+    padding: 2rem;
+}
+ 
+.listItem{
+    list-style: none;
+
+}
+.listItem li{
+    font-size:0.9rem;
+    margin-top: 1.5vh;
+}
+.listItem li:hover{
+   cursor: pointer;
+}
