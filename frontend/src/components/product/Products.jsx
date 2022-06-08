@@ -1,14 +1,16 @@
-import React, { Fragment, useEffect, useState } from "react";
-import "./Products.css";
-import { useSelector, useDispatch } from "react-redux";
-import { clearErrors, getProduct } from "../../actions/productAction";
-import Loader from "../layout/loader/Loader";
+import React, { Fragment, useEffect , useState} from "react";
+
+
 import ProductCard from "../homepage/ProductCard";
+import { getProduct } from "../../redux/actions/ProductAction";
+import { useSelector, useDispatch } from "react-redux";
+import Loader from "../layout/loader/Loader";
 import Pagination from "react-js-pagination";
-import Slider from "@material-ui/core/Slider";
-import { useAlert } from "react-alert";
-import Typography from "@material-ui/core/Typography";
-import MetaData from "../layout/MetaData";
+import Slider from "@mui/material/Slider";
+
+import Typography from "@mui/material/Typography";
+import "./Products.css";
+
 
 const categories = [
   "Laptop",
@@ -23,7 +25,7 @@ const categories = [
 const Products = ({ match }) => {
   const dispatch = useDispatch();
 
-  const alert = useAlert();
+  
 
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState([0, 255000]);
@@ -34,13 +36,13 @@ const Products = ({ match }) => {
   const {
     products,
     loading,
-    error,
+  
     productsCount,
     resultPerPage,
     filteredProductsCount,
   } = useSelector((state) => state.products);
 
-  const keyword = match.params.keyword;
+  // const keyword = match.params.keyword;
 
   const setCurrentPageNo = (e) => {
     setCurrentPage(e);
@@ -52,13 +54,10 @@ const Products = ({ match }) => {
   let count = filteredProductsCount;
 
   useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+   
 
-    dispatch(getProduct(keyword, currentPage, price, category, ratings));
-  }, [dispatch, keyword, currentPage, price, category, ratings, alert, error]);
+    dispatch(getProduct());
+  }, [dispatch]);
 
   return (
     <Fragment>
@@ -66,7 +65,7 @@ const Products = ({ match }) => {
         <Loader />
       ) : (
         <Fragment>
-          <MetaData title="PRODUCTS -- ECOMMERCE" />
+         
           <h2 className="productsHeading">Products</h2>
 
           <div className="products">
@@ -76,7 +75,7 @@ const Products = ({ match }) => {
               ))}
           </div>
 
-          <div className="filterBox">
+          {/* <div className="filterBox">
             <Typography>Price</Typography>
             <Slider
               value={price}
@@ -84,7 +83,7 @@ const Products = ({ match }) => {
               valueLabelDisplay="auto"
               aria-labelledby="range-slider"
               min={0}
-              max={25000}
+              max={255000}
             />
 
             <Typography>Categories</Typography>
@@ -131,7 +130,7 @@ const Products = ({ match }) => {
                 activeLinkClass="pageLinkActive"
               />
             </div>
-          )}
+          )} */}
         </Fragment>
       )}
     </Fragment>

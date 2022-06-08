@@ -16,6 +16,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import "./nav.css"
 import  { useState } from "react";
 import { Button } from '@mui/material';
+import { Link } from "react-router-dom";
 
 
 
@@ -175,7 +176,8 @@ const Navbar = ({history}) => {
             >
               Sumit Mega Mart
             </Typography>
-            <Button
+           <Link to="/"  style={{textDecoration:'none', color:'white'}}>
+           <Button
               variant="h6"
              
               component="div"
@@ -184,16 +186,19 @@ const Navbar = ({history}) => {
             >
               Home
             </Button>
+           </Link>
          
+            <Link to='/product'  style={{textDecoration:'none', color:'white'}}>
             <Button
               variant="h6"
-            
+             
               component="div"
               sx={{ display: { xs: 'none', sm: 'block' } }}
               mr={2}
             >
               Product
             </Button>
+            </Link>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon  onClick={searchHandler} />

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 
 import "./home.css"
 import ProductCard from "./ProductCard";
-import { apiCallGetAll } from "../../redux/actions/ProductAction";
+import { getProduct } from "../../redux/actions/ProductAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/loader/Loader";
 import laptop from "../../assets/laptop.jpg"
@@ -13,11 +13,11 @@ import mobile from "../../assets/mobile.jpg"
 const Home = () => {
     
   const dispatch = useDispatch()
-  const {data, loading} = useSelector((store)=>store.data)
+  const {products, loading} = useSelector((state)=>state.products)
 
   useEffect(()=>{
   
-    dispatch(apiCallGetAll())
+    dispatch(getProduct())
   }, [dispatch])
   return (
     <Fragment>
@@ -31,13 +31,13 @@ const Home = () => {
   </div>
   <div className="carousel-inner">
     <div className="carousel-item active">
-      <img src={laptop} className="d-block w-100" alt="product" height="400px"/>
+      <img src={laptop} className="d-block w-100" alt="product" height="450px"/>
     </div>
     <div className="carousel-item">
-      <img src={headphones} className="d-block w-100" alt="product" height="400px"/>
+      <img src={headphones} className="d-block w-100" alt="product" height="450px"/>
     </div>
     <div className="carousel-item">
-      <img src={mobile} className="d-block w-100" alt="product" height="400px"/>
+      <img src={mobile} className="d-block w-100" alt="product" height="450px"/>
     </div>
   </div>
   <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -57,8 +57,8 @@ const Home = () => {
           <h2 className="homeHeading">Featured Products</h2>
 
           <div className="container" id="container">
-            {data &&
-              data.map((product) => (
+            {products &&
+              products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
           </div>

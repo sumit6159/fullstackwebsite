@@ -1,21 +1,104 @@
+// import {
+//     GETALL,
+//     SETLOADING
+// } from "../actions/ProductAction"
+
+// const initialState = {
+//     data : [],
+//     loading: false,
+
+// }
+
+// export const productReducer = (store=initialState, {type, payload})=>{
+//     switch (type){
+//         case GETALL:
+//             return {...store, loading:false,data:payload,productsCount: payload,
+//                 resultPerPage: payload,
+//                 filteredProductsCount:payload, }
+//         case SETLOADING:
+//             return {...store, loading:payload}
+//         default:
+//             return store       
+//     }
+// }
+
+
+
 import {
-    GETALL,
-    SETLOADING
-} from "../actions/ProductAction"
+    ALL_PRODUCT_FAIL,
+    ALL_PRODUCT_REQUEST,
+    ALL_PRODUCT_SUCCESS,
+   
+    PRODUCT_DETAILS_REQUEST,
+    PRODUCT_DETAILS_FAIL,
+    PRODUCT_DETAILS_SUCCESS,
+    CLEAR_ERRORS,
+  } from "../consts/productConstant";
 
-const initialState = {
-    data : [],
-    loading: false,
-
-}
-
-export const productReducer = (store=initialState, {type, payload})=>{
-    switch (type){
-        case GETALL:
-            return {...store, data:payload, loading:false}
-        case SETLOADING:
-            return {...store, loading:payload}
-        default:
-            return store       
+  export const productsReducer = (state = { products: [] }, action) => {
+    switch (action.type) {
+      case ALL_PRODUCT_REQUEST:
+    //   case ADMIN_PRODUCT_REQUEST:
+        return {
+          loading: true,
+          products: [],
+        };
+      case ALL_PRODUCT_SUCCESS:
+        return {
+          loading: false,
+          products: action.payload.products,
+          productsCount: action.payload.productsCount,
+          resultPerPage: action.payload.resultPerPage,
+          filteredProductsCount: action.payload.filteredProductsCount,
+        };
+  
+    //   case ADMIN_PRODUCT_SUCCESS:
+    //     return {
+    //       loading: false,
+    //       products: action.payload,
+    //     };
+      case ALL_PRODUCT_FAIL:
+    //   case ADMIN_PRODUCT_FAIL:
+        return {
+          loading: false,
+          error: action.payload,
+        };
+  
+      case CLEAR_ERRORS:
+        return {
+          ...state,
+          error: null,
+        };
+      default:
+        return state;
     }
-}
+  };
+
+
+  export const productDetailsReducer = (state = { product: {} }, action) => {
+    switch (action.type) {
+      case PRODUCT_DETAILS_REQUEST:
+        return {
+          loading: true,
+          ...state,
+        };
+      case PRODUCT_DETAILS_SUCCESS:
+        return {
+          loading: false,
+          product: action.payload,
+        };
+      case PRODUCT_DETAILS_FAIL:
+        return {
+          loading: false,
+          error: action.payload,
+        };
+  
+      case CLEAR_ERRORS:
+        return {
+          ...state,
+          error: null,
+        };
+      default:
+        return state;
+    }
+  };

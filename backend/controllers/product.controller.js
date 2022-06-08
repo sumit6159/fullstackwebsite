@@ -32,7 +32,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   
     apiFeature.pagination(resultPerPage);
   
-    // products = await apiFeature.query;
+  //  products = await apiFeature.query;
   
     res.status(200).json({
       success: true,
